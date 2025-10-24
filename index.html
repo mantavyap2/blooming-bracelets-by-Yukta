@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blooming Bracelets - Order Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffc0cb 0%, #ffb6c1 50%, #ff69b4 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .form-content {
+            padding: 40px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+        
+        .required {
+            color: #ff1493;
+        }
+        
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            font-family: inherit;
+        }
+        
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #ff69b4;
+        }
+        
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .catalog-viewer {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .catalog-viewer h3 {
+            color: #ff1493;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .catalog-images {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .catalog-page {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .catalog-page img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .design-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .design-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+        
+        .design-card:hover {
+            border-color: #ff69b4;
+            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.2);
+        }
+        
+        .design-card.selected {
+            border-color: #ff1493;
+            background: linear-gradient(135deg, rgba(255, 105, 180, 0.1), rgba(255, 20, 147, 0.1));
+        }
+        
+        .design-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .design-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #ff1493;
+        }
+        
+        .design-number {
+            font-weight: bold;
+            color: #ff1493;
+            font-size: 1.1em;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .quantity-control label {
+            margin: 0;
+            font-size: 0.9em;
+            font-weight: normal;
+        }
+        
+        .quantity-control input {
+            width: 60px;
+            padding: 6px;
+            text-align: center;
+        }
+        
+        .pricing-info {
+            background: #fff3f8;
+            border: 2px solid #ff69b4;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .pricing-info h3 {
+            color: #ff1493;
+            margin-bottom: 15px;
+        }
+        
+        .pricing-tier {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 1.05em;
+        }
+        
+        .pricing-tier strong {
+            color: #ff1493;
+        }
+        
+        .selected-summary {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .selected-summary.active {
+            display: block;
+        }
+        
+        .selected-summary h4 {
+            color: #ff1493;
+            margin-bottom: 10px;
+        }
+        
+        .selected-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+        
+        .price-section {
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 30px 0;
+        }
+        
+        .price-breakdown {
+            margin-top: 15px;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .price-row:last-child {
+            border-bottom: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            border-top: 2px solid rgba(255,255,255,0.5);
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+        
+        .payment-section {
+            background: #e7f3ff;
+            border: 2px solid #2196F3;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .payment-section h3 {
+            color: #2196F3;
+            margin-bottom: 15px;
+        }
+        
+        .upi-info {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+        }
+        
+        .upi-id {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ff1493;
+            margin: 10px 0;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s;
+            margin-top: 20px;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            transform: scale(1.02);
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .alert {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .help-text {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .toggle-catalog {
+            background: #ff69b4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            margin: 10px 0;
+            width: 100%;
+        }
+        
+        .toggle-catalog:hover {
+            background: #ff1493;
+        }
+        
+        @media (max-width: 600px) {
+            .design-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-content {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌸 Blooming Bracelets</h1>
+            <p>Place Your Order - 31 Beautiful Designs!</p>
+        </div>
+        
+        <div class="form-content">
+            <form id="orderForm">
+                <!-- Catalog Viewer -->
+                <div class="catalog-viewer">
+                    <h3>📖 View Our Complete Catalog</h3>
+                    <button type="button" class="toggle-catalog" onclick="toggleCatalog()">
+                        <span id="catalogToggleText">👁️ Show All Designs</span>
+                    </button>
+                    <div id="catalogImages" style="display: none;">
+                        <p style="text-align: center; color: #666; margin: 15px 0;">
+                            Note: When hosting online, you'll need to upload these catalog images. For now, refer to your PDF.
+                        </p>
+                        <div class="catalog-images">
+                            <div class="catalog-page">
+                                <p style="padding: 20px; text-align: center; background: #f8f9fa;">
+                                    📄 Designs 1-5<br>
+                                    <small>Upload page_1.jpg here</small>
+                                </p>
+                            </div>
+                            <div class="catalog-page">
+                                <p style="padding: 20px; text-align: center; background: #f8f9fa;">
+                                    📄 Designs 6-10<br>
+                                    <small>Upload page_2.jpg here</small>
+                                </p>
+                            </div>
+                            <div class="catalog-page">
+                                <p style="padding: 20px; text-align: center; background: #f8f9fa;">
+                                    📄 Designs 11-15<br>
+                                    <small>Upload page_3.jpg here</small>
+                                </p>
+                            </div>
+                            <div class="catalog-page">
+                                <p style="padding: 20px; text-align: center; background: #f8f9fa;">
+                                    📄 Designs 16-20<br>
+                                    <small>Upload page_4.jpg here</small>
+                                </p>
+                            </div>
+                            <div class="catalog-page">
+                                <p style="padding: 20px; text-align: center; background: #f8f9fa;">
+                                    📄 Designs 21-25<br>
+                                    <small>Upload page_5.jpg here</small>
+                                </p>
+                            </div>
+                            <div class="catalog-page">
+                                <p style="padding: 20px; text-align: center; background: #f8f9fa;">
+                                    📄 Designs 26-31<br>
+                                    <small>Upload page_6.jpg here</small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Customer Information -->
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" id="customerName" required placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label>Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phoneNumber" required placeholder="98XXXXXXXX">
+                </div>
+                
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="email" placeholder="your.email@example.com (optional)">
+                </div>
+                
+                <div class="form-group">
+                    <label>Instagram Handle</label>
+                    <input type="text" id="instagram" placeholder="@yourusername (optional)">
+                </div>
+                
+                <div class="form-group">
+                    <label>Shipping Address <span class="required">*</span></label>
+                    <textarea id="address" required placeholder="Enter your complete shipping address with pincode"></textarea>
+                </div>
+                
+                <!-- Pricing Information -->
+                <div class="pricing-info">
+                    <h3>💰 Special Tiered Pricing</h3>
+                    <div class="pricing-tier">
+                        <span>Buy 1 Bracelet:</span>
+                        <strong>₹249</strong>
+                    </div>
+                    <div class="pricing-tier">
+                        <span>Buy 2 Bracelets:</span>
+                        <strong>₹229 each</strong>
+                    </div>
+                    <div class="pricing-tier">
+                        <span>Buy 3+ Bracelets:</span>
+                        <strong>₹199 each</strong>
+                    </div>
+                    <div class="pricing-tier" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ff69b4;">
+                        <span>Shipping (All Orders):</span>
+                        <strong>₹70</strong>
+                    </div>
+                </div>
+                
+                <!-- Design Selection -->
+                <div class="form-group">
+                    <label>Select Designs & Quantities <span class="required">*</span></label>
+                    <p class="help-text">Check the designs you want and enter quantity for each</p>
+                    <div class="design-grid" id="designGrid">
+                        <!-- Will be populated by JavaScript -->
+                    </div>
+                </div>
+                
+                <!-- Selected Designs Summary -->
+                <div class="selected-summary" id="selectedSummary">
+                    <h4>Your Selection:</h4>
+                    <div id="selectedList"></div>
+                </div>
+                
+                <!-- Price Calculator -->
+                <div class="price-section">
+                    <h3>💳 Your Order Total</h3>
+                    <div class="price-breakdown" id="priceBreakdown">
+                        <div class="price-row">
+                            <span>Select designs to see price</span>
+                            <span>-</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Payment Section -->
+                <div class="payment-section">
+                    <h3>📱 Payment Information</h3>
+                    <div class="alert">
+                        <strong>⚠️ Complete payment before submitting this form</strong>
+                    </div>
+                    
+                    <div class="upi-info">
+                        <p style="color: #666;">Pay using UPI:</p>
+                        <div class="upi-id">yourname@paytm</div>
+                        <p style="color: #666; margin-top: 5px; font-size: 0.9em;">Replace with your actual UPI ID</p>
+                        <div style="margin: 20px auto; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 2px dashed #ddd;">
+                            <p style="color: #999;">📱 Add your UPI QR code image here</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>UPI Transaction ID <span class="required">*</span></label>
+                        <input type="text" id="transactionId" required placeholder="Enter 12-digit transaction ID">
+                        <p class="help-text">Find this in your UPI app payment history</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Amount Paid <span class="required">*</span></label>
+                        <input type="text" id="amountPaid" required placeholder="₹XXX">
+                        <p class="help-text">Enter the exact amount you paid</p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                            <input type="checkbox" id="paymentConfirm" required style="width: auto;">
+                            <span>I confirm I have made the payment <span class="required">*</span></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn" disabled>
+                    Submit Order 🌸
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Generate design cards with quantity inputs (1-31)
+        const designGrid = document.getElementById('designGrid');
+        const designQuantities = {};
+        
+        for (let i = 1; i <= 31; i++) {
+            const card = document.createElement('div');
+            card.className = 'design-card';
+            card.id = `card${i}`;
+            card.innerHTML = `
+                <div class="design-header">
+                    <input type="checkbox" class="design-checkbox" id="design${i}" value="${i}">
+                    <label for="design${i}" class="design-number">#${i}</label>
+                </div>
+                <div class="quantity-control">
+                    <label>Qty:</label>
+                    <input type="number" id="qty${i}" min="1" max="99" value="1" disabled>
+                </div>
+            `;
+            designGrid.appendChild(card);
+            
+            // Initialize quantity
+            designQuantities[i] = 0;
+            
+            // Add event listeners
+            const checkbox = card.querySelector(`#design${i}`);
+            const qtyInput = card.querySelector(`#qty${i}`);
+            
+            checkbox.addEventListener('change', function() {
+                if (this.checked) {
+                    card.classList.add('selected');
+                    qtyInput.disabled = false;
+                    designQuantities[i] = parseInt(qtyInput.value);
+                } else {
+                    card.classList.remove('selected');
+                    qtyInput.disabled = true;
+                    qtyInput.value = 1;
+                    designQuantities[i] = 0;
+                }
+                updateOrder();
+            });
+            
+            qtyInput.addEventListener('input', function() {
+                if (checkbox.checked) {
+                    designQuantities[i] = parseInt(this.value) || 0;
+                    updateOrder();
+                }
+            });
+        }
+
+        function updateOrder() {
+            updateSelectedList();
+            calculatePrice();
+            updateSubmitButton();
+        }
+
+        function updateSelectedList() {
+            const selectedList = document.getElementById('selectedList');
+            const selectedSummary = document.getElementById('selectedSummary');
+            
+            const selected = Object.entries(designQuantities)
+                .filter(([design, qty]) => qty > 0)
+                .map(([design, qty]) => ({ design, qty }));
+            
+            if (selected.length === 0) {
+                selectedSummary.classList.remove('active');
+                return;
+            }
+            
+            selectedSummary.classList.add('active');
+            selectedList.innerHTML = selected.map(item => `
+                <div class="selected-item">
+                    <span><strong>Design #${item.design}</strong></span>
+                    <span>Quantity: ${item.qty}</span>
+                </div>
+            `).join('');
+        }
+
+        function calculatePrice() {
+            const totalQuantity = Object.values(designQuantities).reduce((a, b) => a + b, 0);
+            const priceBreakdown = document.getElementById('priceBreakdown');
+            
+            if (totalQuantity === 0) {
+                priceBreakdown.innerHTML = `
+                    <div class="price-row">
+                        <span>Select designs to see price</span>
+                        <span>-</span>
+                    </div>
+                `;
+                return;
+            }
+            
+            let pricePerUnit;
+            let discountText = '';
+            
+            if (totalQuantity === 1) {
+                pricePerUnit = 249;
+            } else if (totalQuantity === 2) {
+                pricePerUnit = 229;
+                discountText = ' 🎉 You save ₹40!';
+            } else {
+                pricePerUnit = 199;
+                discountText = ` 🎉 You save ₹${(249 - 199) * totalQuantity}!`;
+            }
+            
+            const subtotal = pricePerUnit * totalQuantity;
+            const shipping = 70;
+            const total = subtotal + shipping;
+            
+            // Get selected designs summary
+            const selectedDesigns = Object.entries(designQuantities)
+                .filter(([design, qty]) => qty > 0)
+                .map(([design, qty]) => `#${design}×${qty}`)
+                .join(', ');
+            
+            priceBreakdown.innerHTML = `
+                <div class="price-row">
+                    <span>${totalQuantity} Bracelet${totalQuantity > 1 ? 's' : ''} (${selectedDesigns})</span>
+                    <span></span>
+                </div>
+                <div class="price-row">
+                    <span>Price: ${totalQuantity} × ₹${pricePerUnit}</span>
+                    <span>₹${subtotal}</span>
+                </div>
+                ${discountText ? `<div class="price-row" style="color: #ffd700; border: none; padding: 5px 0; font-size: 0.9em;">${discountText}</div>` : ''}
+                <div class="price-row">
+                    <span>Shipping Charges</span>
+                    <span>₹${shipping}</span>
+                </div>
+                <div class="price-row">
+                    <span>💳 TOTAL TO PAY</span>
+                    <span>₹${total}</span>
+                </div>
+            `;
+            
+            // Auto-fill the amount paid field
+            document.getElementById('amountPaid').placeholder = `₹${total}`;
+        }
+
+        function updateSubmitButton() {
+            const submitBtn = document.getElementById('submitBtn');
+            const paymentConfirm = document.getElementById('paymentConfirm').checked;
+            const totalQuantity = Object.values(designQuantities).reduce((a, b) => a + b, 0);
+            
+            submitBtn.disabled = !(totalQuantity > 0 && paymentConfirm);
+        }
+
+        function toggleCatalog() {
+            const catalogImages = document.getElementById('catalogImages');
+            const toggleText = document.getElementById('catalogToggleText');
+            
+            if (catalogImages.style.display === 'none') {
+                catalogImages.style.display = 'block';
+                toggleText.textContent = '👁️ Hide Designs';
+            } else {
+                catalogImages.style.display = 'none';
+                toggleText.textContent = '👁️ Show All Designs';
+            }
+        }
+
+        // Update submit button when payment confirmation is checked
+        document.getElementById('paymentConfirm').addEventListener('change', updateSubmitButton);
+
+        // Form submission
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect selected designs with quantities
+            const selectedOrders = Object.entries(designQuantities)
+                .filter(([design, qty]) => qty > 0)
+                .map(([design, qty]) => `Design #${design}: ${qty}`)
+                .join(', ');
+            
+            const totalQuantity = Object.values(designQuantities).reduce((a, b) => a + b, 0);
+            
+            // Collect form data
+            const formData = {
+                timestamp: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' }),
+                customerName: document.getElementById('customerName').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                email: document.getElementById('email').value,
+                instagram: document.getElementById('instagram').value,
+                address: document.getElementById('address').value,
+                selectedDesigns: selectedOrders,
+                totalQuantity: totalQuantity,
+                transactionId: document.getElementById('transactionId').value,
+                amountPaid: document.getElementById('amountPaid').value
+            };
+            
+            console.log('Order submitted:', formData);
+            
+            // Here you would send this to Google Sheets via Apps Script
+            // Replace YOUR_WEB_APP_URL with your actual Google Apps Script URL
+            /*
+            fetch('YOUR_WEB_APP_URL', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            });
+            */
+            
+            alert('✅ Order Submitted Successfully!\n\nOrder Details:\n' + selectedOrders + '\n\nTotal: ' + totalQuantity + ' bracelets\n\nWe\'ll verify your payment and get back to you within 24 hours.\n\nThank you for ordering from Blooming Bracelets! 🌸');
+            
+            // Reset form
+            this.reset();
+            Object.keys(designQuantities).forEach(key => designQuantities[key] = 0);
+            document.querySelectorAll('.design-card').forEach(card => card.classList.remove('selected'));
+            document.querySelectorAll('.design-checkbox').forEach(cb => cb.checked = false);
+            document.querySelectorAll('[id^="qty"]').forEach(input => {
+                input.value = 1;
+                input.disabled = true;
+            });
+            updateOrder();
+        });
+    </script>
+</body>
+</html>
