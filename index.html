@@ -711,8 +711,8 @@
             
             // Here you would send this to Google Sheets via Apps Script
             // Replace YOUR_WEB_APP_URL with your actual Google Apps Script URL
-            /*
-            fetch('YOUR_WEB_APP_URL', {
+           
+            fetch('https://script.google.com/macros/s/AKfycbzXUwt195fPxFivIpMTnst4yANRVrq2QqHxItYTh3V66kqxXDY5Uk8-Qmr7Ztf7E9B8Ng/exec', {
                 method: 'POST',
                 mode: 'no-cors',
                 headers: {
@@ -720,7 +720,7 @@
                 },
                 body: JSON.stringify(formData)
             });
-            */
+            
             
             alert('✅ Order Submitted Successfully!\n\nOrder Details:\n' + selectedOrders + '\n\nTotal: ' + totalQuantity + ' bracelets\n\nWe\'ll verify your payment and get back to you within 24 hours.\n\nThank you for ordering from Blooming Bracelets! 🌸');
             
